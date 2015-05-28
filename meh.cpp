@@ -18,12 +18,15 @@ int main()
 	String destination = "/home/kuba/Documents/vision/Photos/n/";
 	String destiny = "/home/kuba/Documents/vision/Photos/n/droga.jpg";
 	lastImg = imread(destiny, CV_LOAD_IMAGE_COLOR);
+	Mat meh = imread(destiny, CV_LOAD_IMAGE_COLOR);
 	img2 = imread(destiny, CV_LOAD_IMAGE_GRAYSCALE);
 	addWeighted(base, 1, img2, -1, 0, img3);
 	namedWindow("albonie", CV_WINDOW_AUTOSIZE);
-	GaussianBlur( img3, img4, Size( 35, 35 ), 0, 0 );
-	threshold(img4, lastImg, 3, 255,0);
+	GaussianBlur( img3, img4, Size( 51, 51 ), 0, 0 );
+	threshold(img4, lastImg, 5, 255,0);
 
+	//imshow("albonie", lastImg);
+	
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 	findContours(lastImg,contours,hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
@@ -39,22 +42,25 @@ int main()
 	vector<Moments> mu(contours.size());
 	for(int i = 0;i<contours.size(); i++) {
 		mu[i] = moments(contours[i],false);
-		cout<<"AREA #"<<i<<": "<<mu[i].m00<<endl;
 	}
-
+	float ratio = 0;
 	vector<Point2f> mc(contours.size());
 	for(int i = 0;i<contours.size(); i++) {
 		mc[i] = Point2f(mu[i].m10/mu[i].m00, mu[i].m01/mu[i].m00);
-		//putText( lastImg, "here", Point(firstWhiteX, firstWhiteY), 2, 2, Scalar(0, 255, 0), 2,2);
-		if (mu[i].m00 > 50000 && mu[i].m00<100000)
-			putText( drawing, "kurwa duze", Point(mc[i].x-100, mc[i].y), 1, 2, Scalar(0, 255, 0), 2,2);
-		else if (mu[i].m00>=100000)
-			putText( drawing, "kurwa overload", Point(mc[i].x-100, mc[i].y), 1, 2, Scalar(0, 255, 0), 2,2);
-		else
-			putText( drawing, "kurwa mniejsze", Point(mc[i].x-100, mc[i].y), 1, 2, Scalar(0, 255, 0), 2,2);
+
+		ratio = mu[i].m00/mc[i].y;
+
+		if ( ratio >= 100 && ratio < 160)
+			putText( meh, "osobowy", Point(mc[i].x-100, mc[i].y), 1, 2, Scalar(0, 0, 0), 2,2);
+		else if (ratio >= 160 && ratio < 230)
+			putText( meh, "dostawczy", Point(mc[i].x-100, mc[i].y), 1, 2, Scalar(0, 0, 0), 2,2);
+		else if (ratio >= 230)
+			putText( meh, "tir", Point(mc[i].x, mc[i].y), 1, 2, Scalar(0, 0, 0), 2,2);
+		else if (ratio < 100)
+			putText( meh, "motor", Point(mc[i].x-50, mc[i].y), 1, 2, Scalar(0, 0, 0), 2,2);
 	}
 
-	imshow("albonie", drawing);
+	imshow("albonie", meh);
 	
 	waitKey(0);	
     return 0;

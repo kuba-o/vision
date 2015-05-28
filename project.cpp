@@ -73,7 +73,7 @@ int main()
 		}
 	}
 	*/
-
+	
 	cout<<lastWhiteX<<"LWX"<<endl;
 	cout<<lastWhiteY<<"LWY"<<endl;
 	putText( lastImg, "here", Point(firstWhiteX, firstWhiteY), 2, 2, Scalar(0, 255, 0), 2,2);

@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {	
-
+	//Mat img = imread("/home/kuba/Document/vision/Photos/")
 
 	Mat base = imread("/home/kuba/Documents/vision/Photos/k/base.JPG", CV_LOAD_IMAGE_GRAYSCALE);
 	Mat base2 = imread("/home/kuba/Documents/vision/Photos/k/base.JPG", CV_LOAD_IMAGE_GRAYSCALE);
